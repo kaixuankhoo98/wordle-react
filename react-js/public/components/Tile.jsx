@@ -1,19 +1,27 @@
 'use client';
 
 import { Box } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import '../animations.css';
 
-const Tile = ({ letter }) => {
+const Tile = ({ letter, isSubmit }) => {
   if (!letter) {
     letter = ' ';
   }
 
   const [isFlipped, setIsFlipped] = useState(false);
 
-  const handleTileClick = () => {
-    setIsFlipped(!isFlipped);
-  };
+  useEffect(() => {
+    if (isSubmit) {
+      setIsFlipped(true);
+
+      const timeout = setTimeout(() => {
+        setIsFlipped(false);
+      }, 1000);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [isSubmit]);
 
   const tileStyle = {
     height: 40,
@@ -32,10 +40,8 @@ const Tile = ({ letter }) => {
   return (
     <Box
       className={tileClass}
-      onClick={handleTileClick}
       sx={tileStyle}
     >
-      {/* {!isFlipped? ' ' : letter} */}
       {letter}
     </Box>
   );

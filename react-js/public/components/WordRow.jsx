@@ -1,14 +1,33 @@
 import { Stack } from '@mui/material'
 import Tile from './Tile'
+import { useEffect, useState } from 'react'
 
-const WordRow = ({ word }) => {
+const WordRow = ({ word, isSubmit }) => {
+  const [letters, setLetters] = useState(['', '', '', '', '']);
+
+  useEffect(() => {
+    const delay = 300;
+    let timeout = null;
+
+    // TODO: do something based on whether it's submitted or not
+    word.split('').forEach((letter, index) => {
+      timeout = setTimeout(() => {
+        setLetters((prevLetters) => {
+          const newLetters = [...prevLetters];
+          newLetters[index] = letter;
+          return newLetters;
+        });
+      }, index * delay);
+    });
+
+    return () => clearTimeout(timeout);
+  }, [word])
+
   return (
     <Stack direction='row' sx={{ display: 'flex', justifyContent: 'center' }}>
-      <Tile letter={word[0]}/>
-      <Tile letter={word[1]}/>
-      <Tile letter={word[2]}/>
-      <Tile letter={word[3]}/>
-      <Tile letter={word[4]}/>
+      {letters.map((letter, index) => (
+        <Tile key={index} letter={letter} />
+      ))}
     </Stack>
   )
 }

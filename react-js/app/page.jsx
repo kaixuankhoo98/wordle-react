@@ -1,16 +1,25 @@
+'use client';
+
 import Main from '@/public/components/Main'
 import WordRow from '@/public/components/WordRow'
 import { Box, Button } from '@mui/material'
+import { useState } from 'react';
 
 export default function Home() {
-  let wordCount = 0;
-
-  const words = ['', '', '', '', '', '']
+  const [wordCount, setWordCount] = useState(0);
+  const [words, setWords] = useState(['hello', '', '', '', '', '']);
+  const [submittedWords, setSubmittedWords] = useState([0, 0, 0, 0, 0])
 
   const handleSubmit = (word) => {
-    words[wordCount] = word;
+    let wordArray = [...words]
+    wordArray[wordCount] = word;
+    setWords(wordArray);
+    
+    let submitArray = [...submittedWords];
+    submitArray[wordCount] = 1;
+    setSubmittedWords(submitArray);
 
-    wordCount++;
+    setWordCount(wordCount + 1);
   };
 
   return (
@@ -29,7 +38,7 @@ export default function Home() {
             margin: '0 auto',
           }}
         >
-          <WordRow word={words[0]} />
+          <WordRow isSubmit={submittedWords[0]} word={words[0]} />
           <WordRow word={words[1]} />
           <WordRow word={words[2]} />
           <WordRow word={words[3]} />
@@ -38,13 +47,13 @@ export default function Home() {
         </Box>
         <Box 
           sx={{
-            width: 240,
+            width: 350,
             height: 150, backgroundColor: 'darkgray',
             margin: '0 auto',
           }}
         >
           Keyboard
-          <Button onClick={handleSubmit()}>
+          <Button onClick={() => handleSubmit('hello')}>
             Submit
           </Button>
         </Box>
